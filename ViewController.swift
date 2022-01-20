@@ -20,12 +20,20 @@ class ViewController: UIViewController {
     var tipAmount2: Double = 0.18
     var tipAmount3: Double = 0.20
     
+    var number = NumberFormatter()
+    
+    
     var openTime: NSDate?
     var closeTime: NSDate?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         billAmountTextField.becomeFirstResponder()
+        
+        number.numberStyle = .currency
+        number.usesGroupingSeparator = true
+        number.locale = Locale(identifier: Locale.current.identifier)
+        print(Locale.current.languageCode!)
         let defaults = UserDefaults.standard
         
         let tipEntered1 = defaults.integer(forKey: "firstTip")
@@ -57,12 +65,13 @@ class ViewController: UIViewController {
         let tipPercentages = [tipAmount1, tipAmount2, tipAmount3]
         
         let tip = bill * tipPercentages[tipControl.selectedSegmentIndex]
-        
+        let formattedTip = formatNumbers(str: String(tip))
         let total = bill + tip
+        let formattedTotal = formatNumbers(str: String(total))
         
         // Update tip amount and total amount
-        tipAmountLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        tipAmountLabel.text = formattedTip
+        totalLabel.text = formattedTotal
     }
     
     func close() {
@@ -98,5 +107,14 @@ class ViewController: UIViewController {
             defaults.synchronize()
         }
     }
+    
+    func formatNumbers(str: String) -> String {
+        if let numberString = Double(str) {
+            let numberNS = NSNumber(value: numberString)
+            return number.string(from: numberNS)!
+        }
+        return "Value is not a number."
+    }
+    
 }
 
