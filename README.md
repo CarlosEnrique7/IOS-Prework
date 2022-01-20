@@ -30,7 +30,8 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-https://i.imgur.com/1JjhnRK.mp4
+![Watch the video](https://i.imgur.com/1JjhnRK.mp4)
+
 https://i.imgur.com/1JjhnRK.mp4
 
 ## Notes
