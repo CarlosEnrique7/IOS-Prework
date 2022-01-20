@@ -20,8 +20,12 @@ class ViewController: UIViewController {
     var tipAmount2: Double = 0.18
     var tipAmount3: Double = 0.20
     
+    var openTime: NSDate?
+    var closeTime: NSDate?
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        billAmountTextField.becomeFirstResponder()
         let defaults = UserDefaults.standard
         
         let tipEntered1 = defaults.integer(forKey: "firstTip")
@@ -59,6 +63,40 @@ class ViewController: UIViewController {
         // Update tip amount and total amount
         tipAmountLabel.text = String(format: "$%.2f", tip)
         totalLabel.text = String(format: "$%.2f", total)
+    }
+    
+    func close() {
+        closeTime = NSDate()
+        let defaults = UserDefaults.standard
+        defaults.set(closeTime, forKey: "close")
+        print("close")
+        print(closeTime!)
+        
+    }
+    
+    func open() {
+        openTime = NSDate()
+        print("open")
+        print(openTime!)
+        let defaults = UserDefaults.standard
+        
+        closeTime = defaults.object(forKey: "close") as! NSDate?
+        if (closeTime != nil) {
+            compare(opens: openTime, closes: closeTime)
+            print("compare:")
+            print(compare(opens: openTime, closes: closeTime))
+        }
+    }
+    
+    func compare(opens: NSDate?, closes: NSDate?) {
+        if(opens!.timeIntervalSinceReferenceDate-closes!.timeIntervalSinceReferenceDate>5) {
+            let defaults = UserDefaults.standard
+            
+            defaults.set(15, forKey: "firstTip")
+            defaults.set(18, forKey: "secondTip")
+            defaults.set(20, forKey: "thirdTip")
+            defaults.synchronize()
+        }
     }
 }
 
